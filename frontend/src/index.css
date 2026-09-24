@@ -1,0 +1,169 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Outfit', sans-serif;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.app {
+  width: 80%;
+  margin: auto;
+}
+
+/* ==========================
+      LIGHT THEME
+========================== */
+
+body{
+
+    background:#ffffff;
+
+    color:#222;
+
+    transition:.3s;
+
+}
+
+/* ==========================
+      DARK THEME
+========================== */
+
+body.dark{
+
+    background:#121212;
+
+    color:white;
+
+}
+
+/* Navbar */
+
+body.dark .navbar{
+
+    background:#1f1f1f;
+
+    color:white;
+
+}
+
+/* Hero */
+
+body.dark .header{
+
+    filter:brightness(.85);
+
+}
+
+/* Food Cards */
+
+body.dark .food-item{
+
+    background:#1f1f1f;
+
+    color:white;
+
+    box-shadow:0 3px 8px rgba(255,255,255,.08);
+
+}
+
+/* Footer */
+
+body.dark .footer{
+
+    background:#1a1a1a;
+
+}
+
+/* Search */
+
+body.dark input{
+
+    background:#2b2b2b;
+
+    color:white;
+
+    border:1px solid #555;
+
+}
+
+/* Select */
+
+body.dark select{
+
+    background:#2b2b2b;
+
+    color:white;
+
+}
+
+/* Buttons */
+
+body.dark button{
+
+    transition:.3s;
+
+}
+
+/* Login Popup */
+
+body.dark .login-popup-container{
+
+    background:#242424;
+
+    color:white;
+
+}
+
+/* Cart */
+
+body.dark .cart{
+
+    color:white;
+
+}
+
+/* Orders */
+
+body.dark .my-orders-order{
+
+    background:#202020;
+
+}
+
+/* Profile */
+
+body.dark .profile-container{
+
+    background:#1f1f1f;
+
+}
+
+/* Place Order */
+
+body.dark .place-order{
+
+    color:white;
+
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

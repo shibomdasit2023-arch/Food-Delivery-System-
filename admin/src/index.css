@@ -1,0 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Outfit;
+}
+
+body{
+    min-height: 100vh;
+    background-color: #fcfcfc;
+}
+a{
+    text-decoration: none;
+    color: inherit;
+}
+hr{
+    border: none;
+    height: 1px;
+    background-color: #a9a9a9;
+}
+.app-content{
+    display: flex;
+}
+.flex-col{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.cursor{
+    cursor: pointer;
+}
+
+/* Light Theme */
+
+body{
+
+    background:#ffffff;
+
+    color:#222;
+
+    transition:.3s;
+
+}
+
+/* Dark Theme */
+
+body.dark{
+
+    background:#121212;
+
+    color:#ffffff;
+
+}
+
+/* Navbar */
+
+body.dark .navbar{
+
+    background:#1e1e1e;
+
+    color:white;
+
+}
+
+/* Sidebar */
+
+body.dark .sidebar{
+
+    background:#1a1a1a;
+
+    border-right:1px solid #333;
+
+}
+
+body.dark .sidebar-option{
+
+    color:white;
+
+}
+
+body.dark .sidebar-option.active{
+
+    background:#333;
+
+}
+
+/* Cards */
+
+body.dark .card{
+
+    background:#1f1f1f;
+
+    color:white;
+
+}
+
+/* Dashboard */
+
+body.dark .dashboard{
+
+    background:#121212;
+
+}
+
+/* Analytics */
+
+body.dark .analytics{
+
+    background:#121212;
+
+}
+
+/* Tables */
+
+body.dark .list-table{
+
+    background:#1f1f1f;
+
+    color:white;
+
+}
+
+body.dark .list-table-format{
+
+    border-color:#333;
+
+}
+
+/* Forms */
+
+body.dark input,
+body.dark textarea,
+body.dark select{
+
+    background:#2b2b2b;
+
+    color:white;
+
+    border:1px solid #555;
+
+}
+
+/* Orders */
+
+body.dark .order-item{
+
+    background:#1f1f1f;
+
+    color:white;
+
+}
+
+/* Charts */
+
+body.dark .chart-card{
+
+    background:#1f1f1f;
+
+    color:white;
+
+}
