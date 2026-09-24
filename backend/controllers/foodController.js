@@ -1,15 +1,33 @@
 import foodModel from "../models/foodModel.js";
-import fs from 'fs'
+import { put, del } from "@vercel/blob";
 
 
-// Add Food Item
+// ==========================================
+// ADD FOOD
+// ==========================================
 
 const addFood = async (req, res) => {
 
     try {
 
-        let image_filename = req.file.filename;
-        console.log("REQ BODY:", req.body);
+        if (!req.file) {
+            return res.json({
+                success: false,
+                message: "Food image is required"
+            });
+        }
+
+        // Upload image to Vercel Blob
+        const blob = await put(
+            `food/${Date.now()}-${req.file.originalname}`,
+            req.file.buffer,
+            {
+                access: "public",
+                contentType: req.file.mimetype
+            }
+        );
+
+        console.log("IMAGE URL:", blob.url);
 
         const food = new foodModel({
 
@@ -18,13 +36,11 @@ const addFood = async (req, res) => {
             price: Number(req.body.price),
             category: req.body.category,
 
-            // New Fields
             rating: Number(req.body.rating),
             type: req.body.type,
-            deliveryTime:req.body.deliveryTime,
+            deliveryTime: req.body.deliveryTime,
 
-            image: image_filename
-
+            image: blob.url
         });
 
         await food.save();
@@ -32,6 +48,35 @@ const addFood = async (req, res) => {
         res.json({
             success: true,
             message: "Food Added"
+        });
+
+    } catch (error) {
+
+        console.log("ADD FOOD ERROR:", error);
+
+        res.json({
+            success: false,
+            message: "Error"
+        });
+
+    }
+
+};
+
+
+// ==========================================
+// LIST FOOD
+// ==========================================
+
+const listFood = async (req, res) => {
+
+    try {
+
+        const foods = await foodModel.find({});
+
+        res.json({
+            success: true,
+            data: foods
         });
 
     } catch (error) {
@@ -45,20 +90,12 @@ const addFood = async (req, res) => {
 
     }
 
-}
+};
 
-// all food list
-const listFood = async(req,res) =>{
-  try {
-    const foods = await foodModel.find({});
-    res.json({success:true, data:foods})
-  } catch (error) {
-    console.log(error);
-    res.json({success:false,message:"Error"})
-  }
-}
 
-// Get Single Food
+// ==========================================
+// GET SINGLE FOOD
+// ==========================================
 
 const getFood = async (req, res) => {
 
@@ -91,25 +128,75 @@ const getFood = async (req, res) => {
 
     }
 
-}
-
-// remove food
-
-const removeFood = async (req, res) =>{
-  try {
-    const food = await foodModel.findById(req.body._id);
-    fs.unlink(`uploads/${food.image}`,()=>{})
-
-    await foodModel.findByIdAndDelete(req.body._id);
-    res.json({success:true, message:"Food Removed"})
-  } catch (error) {
-    console.log(error);
-    res.json({success:false, message:"Error"})
-  }
-}
+};
 
 
-// Update Food
+// ==========================================
+// REMOVE FOOD
+// ==========================================
+
+const removeFood = async (req, res) => {
+
+    try {
+
+        const food = await foodModel.findById(req.body._id);
+
+        if (!food) {
+
+            return res.json({
+                success: false,
+                message: "Food not found"
+            });
+
+        }
+
+        // Delete image from Vercel Blob
+        if (
+            food.image &&
+            food.image.startsWith("http")
+        ) {
+
+            try {
+
+                await del(food.image);
+
+            } catch (deleteError) {
+
+                console.log(
+                    "Image delete error:",
+                    deleteError
+                );
+
+            }
+
+        }
+
+        await foodModel.findByIdAndDelete(
+            req.body._id
+        );
+
+        res.json({
+            success: true,
+            message: "Food Removed"
+        });
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.json({
+            success: false,
+            message: "Error"
+        });
+
+    }
+
+};
+
+
+// ==========================================
+// UPDATE FOOD
+// ==========================================
 
 const updateFood = async (req, res) => {
 
@@ -125,6 +212,21 @@ const updateFood = async (req, res) => {
             deliveryTime
         } = req.body;
 
+
+        const existingFood =
+            await foodModel.findById(req.params.id);
+
+
+        if (!existingFood) {
+
+            return res.json({
+                success: false,
+                message: "Food not found"
+            });
+
+        }
+
+
         const updateData = {
 
             name,
@@ -137,43 +239,82 @@ const updateFood = async (req, res) => {
 
         };
 
-        // Update image only if a new one is uploaded
+
+        // If a new image was uploaded
         if (req.file) {
 
-            updateData.image = req.file.filename;
+            // Upload new image
+            const blob = await put(
+                `food/${Date.now()}-${req.file.originalname}`,
+                req.file.buffer,
+                {
+                    access: "public",
+                    contentType: req.file.mimetype
+                }
+            );
+
+
+            updateData.image = blob.url;
+
+
+            // Delete old Blob image
+            if (
+                existingFood.image &&
+                existingFood.image.startsWith("http")
+            ) {
+
+                try {
+
+                    await del(existingFood.image);
+
+                } catch (deleteError) {
+
+                    console.log(
+                        "Old image delete error:",
+                        deleteError
+                    );
+
+                }
+
+            }
 
         }
+
 
         await foodModel.findByIdAndUpdate(
             req.params.id,
             updateData
         );
 
+
         res.json({
 
             success: true,
-
             message: "Food Updated Successfully"
 
         });
 
-    }
 
-    catch (error) {
+    } catch (error) {
 
-        console.log(error);
+        console.log("UPDATE FOOD ERROR:", error);
 
         res.json({
 
             success: false,
-
             message: "Error"
 
         });
 
     }
 
-}
+};
 
 
-export {addFood, listFood,removeFood, getFood, updateFood}
+export {
+    addFood,
+    listFood,
+    removeFood,
+    getFood,
+    updateFood
+};

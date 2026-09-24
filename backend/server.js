@@ -13,7 +13,7 @@ import analyticsRouter from "./routes/analyticsRoute.js";
 
 //app config
 const app = express()
-const port = 4000
+
 
 
 //middleware
@@ -27,7 +27,7 @@ connectDB();
 
 //api endpoints
 app.use("/api/food", foodRouter)
-app.use("/images", express.static('uploads'))
+//app.use("/images", express.static('uploads'))
 app.use("/api/user", userRouter)
 app.use("/api/cart",cartRouter)
 app.use("/api/order", orderRouter)
@@ -35,11 +35,17 @@ app.use("/api/dashboard", dashboardRouter);
 app.use("/api/analytics", analyticsRouter);
 
 
-app.get("/", (req, res)=>{
-    res.send("API Working")
-})
+app.get("/", (req, res) => {
+    res.send("API Working");
+});
 
+// Run local server when not deployed on Vercel
+if (!process.env.VERCEL) {
+    const port = process.env.PORT || 4000;
 
-app.listen(port, ()=>{
-    console.log(`Server Started on http://localhost:${port}`)
-})
+    app.listen(port, () => {
+        console.log(`Server Started on http://localhost:${port}`);
+    });
+}
+
+export default app;
