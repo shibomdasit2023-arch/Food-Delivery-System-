@@ -3,7 +3,7 @@ import Navbar from './components/Navbar/Navbar'
 import Sidebar from './components/Sidebar/Sidebar'
 import { Route, Routes } from 'react-router-dom'
 import Add from './pages/Add/Add'
-import List from './pages/List/list'
+import List from './pages/List/List'
 import Orders from './pages/Orders/Orders'
 import Edit from './pages/Edit/Edit'
 import Dashboard from "./pages/Dashboard/Dashboard"
