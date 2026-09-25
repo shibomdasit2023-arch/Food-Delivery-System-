@@ -14,6 +14,20 @@ import analyticsRouter from "./routes/analyticsRoute.js";
 //app config
 const app = express()
 
+app.use(async (req, res, next) => {
+    try {
+        await connectDB();
+        next();
+    } catch (error) {
+        console.error("DATABASE CONNECTION FAILED:", error);
+
+        res.status(500).json({
+            success: false,
+            message: "Database connection failed"
+        });
+    }
+});
+
 
 
 //middleware
@@ -22,7 +36,7 @@ app.use(cors())
 
 
 //db connection
-connectDB();
+//connectDB();
 
 
 //api endpoints
